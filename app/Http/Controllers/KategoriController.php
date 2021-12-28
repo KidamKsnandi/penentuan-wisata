@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kategori;
+use Session;
 use Illuminate\Http\Request;
 
 class KategoriController extends Controller
@@ -25,7 +26,7 @@ class KategoriController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.kategori.create');
     }
 
     /**
@@ -36,7 +37,20 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nama_kategori' => 'required',
+            'deskripsi_kategori' => 'required'
+        ]);
+
+        $kategori = new Kategori();
+        $kategori->nama_kategori = $request->nama_kategori;
+        $kategori->deskripsi_kategori = $request->deskripsi_kategori;
+        $kategori->save();
+        Session::flash("flash_notification", [
+                        "level"=>"success",
+                        "message"=>"Berhasil Menyimpan $kategori->nama_kategori"
+                        ]);
+        return redirect()->route('kategori.index');
     }
 
     /**
@@ -45,9 +59,10 @@ class KategoriController extends Controller
      * @param  \App\Models\Kategori  $kategori
      * @return \Illuminate\Http\Response
      */
-    public function show(Kategori $kategori)
+    public function show($id)
     {
-        //
+        $kategori = Kategori::findOrFail($id);
+        return view('admin.kategori.show', compact('kategori'));
     }
 
     /**
@@ -56,9 +71,10 @@ class KategoriController extends Controller
      * @param  \App\Models\Kategori  $kategori
      * @return \Illuminate\Http\Response
      */
-    public function edit(Kategori $kategori)
+    public function edit($id)
     {
-        //
+        $kategori = Kategori::findOrFail($id);
+        return view('admin.kategori.edit', compact('kategori'));
     }
 
     /**
@@ -68,9 +84,23 @@ class KategoriController extends Controller
      * @param  \App\Models\Kategori  $kategori
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Kategori $kategori)
+   public function update(Request $request, $id)
     {
-        //
+        // Validasi data
+        $validated = $request->validate([
+            'nama_kategori' => 'required',
+            'deskripsi_kategori' => 'required',
+        ]);
+
+        $kategori = Kategori::findOrFail($id);
+        $kategori->nama_kategori = $request->nama_kategori;
+        $kategori->deskripsi_kategori = $request->deskripsi_kategori;
+        $kategori->save();
+        Session::flash("flash_notification", [
+                        "level"=>"success",
+                        "message"=>"Berhasil Menyimpan $kategori->nama_kategori"
+                        ]);
+        return redirect()->route('kategori.index');
     }
 
     /**
@@ -79,8 +109,14 @@ class KategoriController extends Controller
      * @param  \App\Models\Kategori  $kategori
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Kategori $kategori)
+    public function destroy($id)
     {
-        //
+        $kategori = Kategori::findOrFail($id);
+        $kategori->delete();
+        Session::flash("flash_notification", [
+                        "level"=>"success",
+                        "message"=>"Berhasil Menghapus $kategori->nama_kategori"
+                        ]);
+        return redirect()->route('kategori.index');
     }
 }

@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-1o">
-                <h2 class="m-0">Data Kategori</h2>
+                <h2 class="m-0">Data Wisata Bandung</h2>
             </div>
         </div>
     </div>
@@ -16,23 +16,33 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <a href="{{route('kategori.create')}}" class="btn btn-sm btn-info float-right text-white">Tambah Data Kereta</a>
+                    <a href="{{route('wisata.create')}}" class="btn btn-sm btn-info float-right text-white">Tambah Data Wisata</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table">
                             <tr>
                                 <th>Nomor</th>
-                                <th>Nama Kategori</th>
+                                <th>Nama Wisata</th>
+                                <th>Kategori Wisata</th>
+                                <th>Lokasi</th>
                                 <th>Deskripsi Kategori</th>
+                                <th>Harga Tiket</th>
+                                <th>Cover</th>
+                                <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
                             @php $no=1; @endphp
-                            @foreach($kategori as $data)
+                            @foreach($wisata as $data)
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td>{{ $data->nama_kategori }}</td>
-                                <td>{{ $data->deskripsi_kategori }}</td>
+                                <td>{{ $data->nama_wisata }}</td>
+                                <td>{{ $data->kategori->nama_kategori }}</td>
+                                <td>{{ $data->lokasi }}</td>
+                                <td>{{ $data->deskripsi_wisata }}</td>
+                                <td>{{ $data->harga_tiket }}</td>
+                                <td>{{ $data->cover }}</td>
+                                <td>{{ $data->status }}</td>
                                 <td>
                                     <form action="{{ route('kategori.destroy', $data->id) }}" method="POST">
                                         @method('delete')
